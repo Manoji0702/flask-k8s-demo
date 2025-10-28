@@ -9,7 +9,7 @@ pipeline {
   stages {
     stage('Checkout') {
       steps {
-        git 'https://github.com/manoj0207/flask-k8s-demo.git'
+        git url: 'https://github.com/Manoji0702/flask-k8s-demo.git', credentialsId: 'github-pat'
       }
     }
 
