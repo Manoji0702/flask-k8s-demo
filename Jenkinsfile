@@ -15,14 +15,14 @@ pipeline {
 
     stage('Build Docker Image') {
       steps {
-        sh 'docker build -t $DOCKER_IMAGE .'
+        bat 'docker build -t $DOCKER_IMAGE .'
       }
     }
 
     stage('Push to Docker Hub') {
       steps {
         withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
-          sh """
+          bat """
             echo $PASS | docker login -u $USER --password-stdin
             docker push $DOCKER_IMAGE
           """
@@ -33,7 +33,7 @@ pipeline {
     stage('Terraform Apply') {
       steps {
         withCredentials([file(credentialsId: 'kubeconfig-cred-id', variable: 'KUBE_CONFIG')]) {
-          sh """
+          bat """
             cd terraform
             terraform init
             terraform apply -auto-approve -var="image=$TF_VAR_image" -var="kubeconfig_path=$KUBE_CONFIG"
